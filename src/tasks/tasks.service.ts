@@ -1,3 +1,4 @@
+import { CreateTaskDto } from './dto/create-task.dto';
 import { TaskRepository } from './task.repository';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { TaskStatus } from './task-status.enum';
@@ -18,17 +19,16 @@ export class TasksService {
     return found;
   }
 
-  getAllTasks() {}
+  async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
+    const { title, description } = createTaskDto;
 
-  createTask() {
-    // const task: Task = {
-    //   id: uuid(),
-    //   title,
-    //   desription,
-    //   status: TaskStatus.COMPLETE,
-    // };
+    const task = this.tasksRespository.create({
+      title,
+      description,
+      status: TaskStatus.COMPLETE,
+    });
+
+    await this.tasksRespository.save(task);
+    return task;
   }
-  deleteTasks() {}
-
-  updateTaskStatus() {}
 }
